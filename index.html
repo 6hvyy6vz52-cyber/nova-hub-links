@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>nova links</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;color:#fff;background:#030706}
+#bg{
+ position:fixed;inset:-12%;width:124%;height:124%;z-index:0;
+ background:
+ radial-gradient(circle at 20% 25%,rgba(0,255,120,.28),transparent 28%),
+ radial-gradient(circle at 80% 70%,rgba(0,180,255,.24),transparent 30%),
+ linear-gradient(135deg,#020604,#07150d 48%,#010504);
+ background-size:cover;background-position:center;
+ transition:transform .08s linear,background .2s;
+}
+#grid{
+ position:absolute;inset:0;pointer-events:none;opacity:.7;
+ background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+ background-size:55px 55px;
+}
+.glow{position:absolute;width:420px;height:420px;border-radius:50%;filter:blur(80px);pointer-events:none}
+.g1{left:5%;top:5%;background:rgba(0,255,120,.13)}
+.g2{right:5%;bottom:0;background:rgba(0,170,255,.12)}
+
+.corner{
+ position:fixed;top:18px;right:20px;z-index:10;padding:9px 13px;
+ border:1px solid rgba(255,255,255,.14);border-radius:12px;
+ background:rgba(0,0,0,.32);backdrop-filter:blur(12px);
+ color:rgba(255,255,255,.85);font-size:13px
+}
+.center{
+ position:relative;z-index:3;width:100%;height:100%;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ text-align:center
+}
+h1{
+ margin:0;font-size:clamp(70px,13vw,155px);font-weight:800;
+ letter-spacing:-7px;text-shadow:0 0 25px var(--accent-shadow),0 0 70px var(--accent-shadow)
+}
+.line{
+ width:min(430px,70vw);height:3px;margin:10px 0 18px;
+ background:var(--line);box-shadow:0 0 18px var(--accent-shadow);
+ border-radius:20px;transform:translateX(var(--line-x,0px));
+ transition:background .15s
+}
+.launch{
+ padding:13px 24px;border-radius:14px;color:#fff;text-decoration:none;
+ background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.18);
+ backdrop-filter:blur(12px);transition:.2s
+}
+.launch:hover{transform:translateY(-3px) scale(1.04);background:rgba(255,255,255,.13)}
+.hint{position:fixed;bottom:17px;left:20px;z-index:4;color:rgba(255,255,255,.35);font-size:11px}
+
+.settings{
+ position:fixed;left:18px;top:18px;z-index:20;width:270px;
+ padding:16px;border:1px solid rgba(255,255,255,.14);border-radius:16px;
+ background:rgba(5,8,8,.78);backdrop-filter:blur(16px);
+ box-shadow:0 15px 50px rgba(0,0,0,.35)
+}
+.settings h3{margin:0 0 12px;font-size:16px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0}
+.row label{font-size:12px;color:#cdd5d1}
+input[type=color]{width:52px;height:34px;padding:2px;border:0;background:transparent;cursor:pointer}
+input[type=range]{width:130px;accent-color:var(--line)}
+input[type=file]{width:100%;font-size:11px;color:#bbb}
+button{
+ width:100%;padding:9px;margin-top:7px;border:1px solid rgba(255,255,255,.16);
+ border-radius:9px;background:rgba(255,255,255,.08);color:white;cursor:pointer
+}
+button:hover{background:rgba(255,255,255,.15)}
+.small{font-size:10px;color:#89928e;margin-top:8px;line-height:1.4}
+</style>
+</head>
+<body>
+
+<div id="bg">
+ <div id="grid"></div>
+ <div class="glow g1"></div>
+ <div class="glow g2"></div>
+</div>
+
+<div class="settings">
+ <h3>Nova Settings</h3>
+
+ <div class="row">
+  <label for="color">Nova / line color</label>
+  <input id="color" type="color" value="#00ff78">
+ </div>
+
+ <div class="row">
+  <label for="lineMove">Move line</label>
+  <input id="lineMove" type="range" min="-200" max="200" value="0">
+ </div>
+
+ <div class="row">
+  <label for="lineWidth">Line width</label>
+  <input id="lineWidth" type="range" min="1" max="10" value="3">
+ </div>
+
+ <label for="backgroundFile" style="font-size:12px;color:#cdd5d1">Upload your own background</label>
+ <input id="backgroundFile" type="file" accept="image/*">
+
+ <button id="clearBg" type="button">Remove custom background</button>
+ <button id="hideSettings" type="button">Hide settings</button>
+
+ <div class="small">
+  Your uploaded image stays on this device while this page is open.
+  Move the mouse to move the background.
+ </div>
+</div>
+
+<div class="corner">
+ <span id="device">Device 100%</span> • <span id="clock">--:--:--</span>
+</div>
+
+<main class="center">
+ <h1 id="title">Nova</h1>
+ <div class="line" id="line"></div>
+ <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;width:100%;">
+<a class="launch" href="https://s3.amazonaws.com/angelfern/index.html"
+    target="_blank" rel="noopener noreferrer">Fern</a>
+<a class="launch" href="https://s3.amazonaws.com/prageru-server/mathematics.html"
+    target="_blank" rel="noopener noreferrer">GN-Math</a> <a class="launch" href="https://storage.googleapis.com/canvas-lms/index.html"
+    target="_blank" rel="noopener noreferrer">dogeubg</a> <a class="launch" href="https://ethostulsa.org/"
+    target="_blank" rel="noopener noreferrer">invis</a> <a class="launch" href="https://brainworxedu.github.io/"
+    target="_blank" rel="noopener noreferrer">brainworkx</a> <a class="launch" href="https://springwaterbaptist.org/"
+    target="_blank" rel="noopener noreferrer">rosin</a> <a class="launch" href="https://classwork.cloud/"
+    target="_blank" rel="noopener noreferrer">kiwi</a> <a class="launch" href="https://zinc-browser.vercel.app/"
+    target="_blank" rel="noopener noreferrer">zinc</a> <a class="launch" href="http://kahoot.learning.s3-website.us-east-2.amazonaws.com/"
+    target="_blank" rel="noopener noreferrer">lazylist</a>
+    
+
+</div>
+
+</main>
+
+<div class="hint">Move your mouse to move the background</div>
+
+<script>
+const root=document.documentElement;
+const bg=document.getElementById("bg");
+const color=document.getElementById("color");
+const lineMove=document.getElementById("lineMove");
+const lineWidth=document.getElementById("lineWidth");
+const file=document.getElementById("backgroundFile");
+const clearBg=document.getElementById("clearBg");
+const hideSettings=document.getElementById("hideSettings");
+const settings=document.querySelector(".settings");
+
+function hexToRgba(hex,a){
+ const n=parseInt(hex.slice(1),16);
+ return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+function applyColor(){
+ const c=color.value;
+ root.style.setProperty("--line",c);
+ root.style.setProperty("--accent-shadow",hexToRgba(c,.32));
+}
+applyColor();
+
+color.addEventListener("input",applyColor);
+lineMove.addEventListener("input",()=>root.style.setProperty("--line-x",lineMove.value+"px"));
+lineWidth.addEventListener("input",()=>document.getElementById("line").style.height=lineWidth.value+"px");
+
+file.addEventListener("change",()=>{
+ const selected=file.files && file.files[0];
+ if(!selected)return;
+ if(!selected.type.startsWith("image/"))return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  bg.style.backgroundImage=`url("${reader.result}")`;
+  bg.style.backgroundSize="cover";
+  bg.style.backgroundPosition="center";
+  bg.dataset.custom="true";
+ };
+ reader.readAsDataURL(selected);
+});
+
+clearBg.addEventListener("click",()=>{
+ bg.style.backgroundImage="";
+ delete bg.dataset.custom;
+});
+
+hideSettings.addEventListener("click",()=>{
+ settings.style.display="none";
+ const reopen=document.createElement("button");
+ reopen.id="reopen";
+ reopen.textContent="⚙";
+ reopen.style.cssText="position:fixed;left:18px;top:18px;z-index:30;width:42px;height:42px;margin:0;border-radius:50%;font-size:18px";
+ document.body.appendChild(reopen);
+ reopen.addEventListener("click",()=>{
+  settings.style.display="block";
+  reopen.remove();
+ });
+});
+
+let targetX=0,targetY=0,currentX=0,currentY=0;
+addEventListener("mousemove",e=>{
+ targetX=(e.clientX/innerWidth-.5)*42;
+ targetY=(e.clientY/innerHeight-.5)*42;
+});
+function animate(){
+ currentX+=(targetX-currentX)*.08;
+ currentY+=(targetY-currentY)*.08;
+ bg.style.transform=`translate(${currentX}px,${currentY}px)`;
+ requestAnimationFrame(animate);
+}
+animate();
+
+function updateClock(){
+ document.getElementById("clock").textContent=new Date().toLocaleTimeString([],{
+  hour:"numeric",minute:"2-digit",second:"2-digit"
+ });
+}
+updateClock();setInterval(updateClock,1000);
+
+function updateDevice(){
+ document.getElementById("device").textContent="Device "+Math.round(devicePixelRatio*100)+"%";
+}
+updateDevice();addEventListener("resize",updateDevice);
+</script>
+</body>
+</html>
